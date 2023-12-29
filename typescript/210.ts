@@ -1,4 +1,4 @@
-function canFinish(numCourses: number, prerequisites: number[][]): boolean {
+function findOrder(numCourses: number, prerequisites: number[][]): number[] {
     const hash: Record<number, number[]> = {};
     for (let prer of prerequisites) {
         if (hash[prer[0]] === undefined) {
@@ -7,6 +7,8 @@ function canFinish(numCourses: number, prerequisites: number[][]): boolean {
         hash[prer[0]].push(prer[1]);
     }
     const visitSet: Set<number> = new Set();
+    const curPath: number[] = [];
+    const res: number[] = [];
     function dfs(course: number) {
         if (hash[course] === undefined || hash[course].length === 0) {
             return true;
@@ -21,6 +23,7 @@ function canFinish(numCourses: number, prerequisites: number[][]): boolean {
             if (!dfs(prerequisite)) {
                 return false;
             }
+            curPath.push(prerequisite);
             hash[course].shift();
             visitSet.delete(prerequisite);
         }
@@ -28,8 +31,15 @@ function canFinish(numCourses: number, prerequisites: number[][]): boolean {
     }
     for (let i = 0; i < numCourses; i++) {
         if (!dfs(i)) {
-            return false;
+            return [];
+        }
+        curPath.push(i);
+        while (curPath.length) {
+            if (res.indexOf(curPath[0]) === -1) {
+                res.push(curPath[0]);
+            }
+            curPath.shift();
         }
     }
-    return true;
+    return res;
 };
