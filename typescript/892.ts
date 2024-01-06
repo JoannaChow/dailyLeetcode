@@ -21,7 +21,7 @@ export class Solution {
             }
         }
 
-        const visited: Map<string, boolean> = new Map();
+        const visited: Map<string, boolean> = new Map();    // true means found a loop
         const res: string[] = [];
 
         function dfs(c: string) {
