@@ -1,19 +1,18 @@
 function mergeTriplets(triplets: number[][], target: number[]): boolean {
-    const availableTriplets: number[][] = [[], [], []]; //each row is for each integer
+    const availableTriplets: Set<number> = new Set(); //each row is for each integer
     for (let i = 0; i < triplets.length; i++) {
         const [a, b, c] = triplets[i];
-        if (a === target[0] && b <= target[1] && c <= target[2]) {
-            availableTriplets[0].push(i);
+        if (a > target[0] || b > target[1] || c > target[2]) continue;
+        if (a === target[0]) {
+            availableTriplets.add(1);
         }
-        if (b === target[1] && a <= target[0] && c <= target[2]) {
-            availableTriplets[1].push(i);
+        if (b === target[1]) {
+            availableTriplets.add(2);
         }
-        if (c === target[2] && b <= target[1] && a <= target[0]) {
-            availableTriplets[2].push(i);
+        if (c === target[2]) {
+            availableTriplets.add(3);
         }
     }
-    if (availableTriplets[0].length === 0 || availableTriplets[1].length === 0 || availableTriplets[2].length === 0) {
-        return false;
-    }
-    return true;
+
+    return availableTriplets.size === 3;
 };
