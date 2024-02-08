@@ -1,25 +1,26 @@
 function maxCoins(nums: number[]): number {
     nums.unshift(1);
     nums.push(1);
-    const dp = new Map();
+    const dp: number[][] = [];
+    for (let i = 0; i < nums.length; i++) {
+        dp.push(Array(nums.length).fill(0));
+    }
 
     function dfs(left, right): number {
         if (left > right) {
             return 0;
         }
 
-        const key = `${left},${right}`;
-        if (dp.has(key)) {
-            return dp.get(key);
+        if (dp[left][right] > 0) {
+            return dp[left][right];
         }
 
-        dp.set(key, 0);
         for (let i = left; i <= right; i++) {
             let coins = nums[left - 1] * nums[i] * nums[right + 1];
             coins += dfs(left, i - 1) + dfs(i + 1, right);
-            dp.set(key, Math.max(dp.get(key), coins));
+            if (coins > dp[left][right]) dp[left][right] = coins;
         }
-        return dp.get(key);
+        return dp[left][right];
     }
 
     return dfs(1, nums.length - 2);
