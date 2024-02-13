@@ -39,4 +39,3 @@
 ##### deep dive:
   - reliability: **prevent data loss & reduce duplication**
   - additional component: notification template, settings, rate limiting, retry mechanism, security, monitor queued notifications & event tracking
-  - updated design
