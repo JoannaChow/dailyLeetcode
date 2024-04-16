@@ -1,35 +1,29 @@
 function eventualSafeNodes(graph: number[][]): number[] {
-    const safe: Set<number> = new Set();
-    const unsafe: Set<number> = new Set();
-    let path: number[] = [];
+    const safe: number[] = Array(graph.length).fill(-1);
+    let path: number[] = Array(graph.length).fill(-1);
     for (let i = 0; i < graph.length; i++) {
         dfs(i);
     }
     function dfs(node: number) {
         if (graph[node].length === 0) {
-            safe.add(node);
+            safe[node] = node;
             return true;
         }
 
         for (let next of graph[node]) {
-            if (safe.has(next)) continue;
-            if (unsafe.has(next) || path.includes(next)) {
+            if (safe[next] !== -1) continue;
+            if (path[next] !== -1) {
                 // cycle found
-                path.forEach((p) => unsafe.add(p));
                 return false;
             }
 
-            path.push(next);
+            path[next] = next;
             if (!dfs(next)) return false;
-            path.pop();
+            path[next] = -1;
         }
-        safe.add(node);
+        safe[node] = node;
         return true;
     }
-    const ret: number[] = [];
-    safe.forEach((v1) => {
-        ret.push(v1);
-    });
-    ret.sort((a, b) => a - b);
-    return ret;
+
+    return safe.filter((v) => v !== -1);
 }
