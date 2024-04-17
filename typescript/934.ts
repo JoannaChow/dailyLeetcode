@@ -31,7 +31,7 @@ function shortestBridge(grid: number[][]): number {
             const nextX = x + toX,
                 nextY = y + toY;
             if (nextX < 0 || nextX >= width || nextY < 0 || nextY >= height)
-                return;
+                continue;
 
             if (grid[nextX][nextY] === 1) {
                 dfs_explore_island(nextX, nextY);
