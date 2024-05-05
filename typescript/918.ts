@@ -6,8 +6,8 @@ function maxSubarraySumCircular(nums: number[]): number {
         total = 0;
 
     for (const num of nums) {
-        curMax = Math.max(curMax, num);
-        curMin = Math.min(curMin, num);
+        curMax = Math.max(curMax + num, num);
+        curMin = Math.min(curMin + num, num);
         total += num;
         globMax = Math.max(globMax, curMax);
         globMin = Math.min(globMin, curMin);
