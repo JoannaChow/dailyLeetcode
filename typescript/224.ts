@@ -1,57 +1,29 @@
 function calculate(s: string): number {
-    const queue: string[] = [];
-    const operator: string[] = ["+", "-"];
-
-    s.split("").forEach((c) => {
+    const stack: number[] = [];
+    let num = 0;
+    let sign = 1;
+    let result = 0;
+    for (let i = 0; i < s.length; i++) {
+        const c = s[i];
         if (!isNaN(parseInt(c))) {
-            let curNum = 0;
-            if (!isNaN(parseInt(queue[queue.length - 1]))) {
-                curNum = 10 * parseInt(queue.pop() as string) + parseInt(c);
-            } else {
-                curNum = parseInt(c);
+            num = num * 10 + parseInt(c);
+        } else if (c === "+" || c === "-") {
+            result += sign * num;
+            sign = c === "+" ? 1 : -1;
+            num = 0;
+        } else if (c === "(") {
+            stack.push(result);
+            stack.push(sign);
+            result = 0;
+            sign = 1;
+        } else if (c === ")") {
+            result += sign * num;
+            if (stack.length) {
+                result *= stack.pop() as number;
+                result += stack.pop() as number;
             }
-            queue.push(curNum.toString());
-        } else {
-            const validChars = ["(", ")", "+", "-"];
-            if (validChars.includes(c)) {
-                if (operator.includes(c) || c === "(") {
-                    queue.push(c);
-                } else {
-                    // c === ")"
-                    const rightQueue: string[] = [];
-                    let last = queue.pop() as string;
-                    while (last !== "(") {
-                        rightQueue.unshift(last);
-                        last = queue.pop() as string;
-                    }
-                    const val = reduce(rightQueue);
-                    queue.push(val.toString());
-                }
-            }
+            num = 0;
         }
-    });
-    if (queue.length > 1) {
-        let val = reduce(queue);
-        return val;
-    } else {
-        return parseInt(queue.pop() as string);
     }
-
-    function reduce(q: string[]): number {
-        let val = 0;
-        while (q.length) {
-            if (!isNaN(parseInt(q[0]))) {
-                val += parseInt(q.shift() as string);
-            } else if (q[0] === "+") {
-                q.shift();
-                const next = q.shift() as string;
-                val += parseInt(next);
-            } else {
-                q.shift();
-                const next = q.shift() as string;
-                val -= parseInt(next);
-            }
-        }
-        return val;
-    }
+    return result + sign * num;
 }
