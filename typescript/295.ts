@@ -1,155 +1,157 @@
-class MaxHeap {
-    private heap: number[];
+class MinHeap {
+    heap: number[];
     constructor() {
         this.heap = [];
     }
+    getSize() {
+        return this.heap.length;
+    }
 
-    heapPush(num: number) {
+    pushHeap(num: number) {
         this.heap.push(num);
-        let i = this.heap.length - 1;
-        while (i > 0) {
-            const parentIndex = Math.floor((i - 1) / 2);
-            if (this.heap[parentIndex] < this.heap[i]) {
+        let curIndex = this.heap.length - 1;
+        while (curIndex > 0) {
+            const parentIndex = Math.ceil(curIndex / 2) - 1;
+            if (this.heap[parentIndex] > this.heap[curIndex]) {
                 const temp = this.heap[parentIndex];
-                this.heap[parentIndex] = this.heap[i];
-                this.heap[i] = temp;
-                i = parentIndex;
+                this.heap[parentIndex] = this.heap[curIndex];
+                this.heap[curIndex] = temp;
+                curIndex = parentIndex;
             } else {
                 break;
             }
         }
     }
 
-    heapPop(): number {
-        const top = this.heap[0];
-        this.heap[0] = this.heap[this.heap.length - 1];
-        this.heap.pop();
-        let i = 0;
-        while (i < this.heap.length) {
-            const leftChildIndex = (i * 2) + 1;
-            const rightChildIndex = (i * 2) + 2;
+    getMin() {
+        return this.heap[0];
+    }
+
+    popHeap() {
+        const max = this.heap[0];
+        this.heap[0] = this.heap.pop() as number;
+        let curIndex = 0;
+        while (curIndex < this.heap.length) {
+            const leftIndex = 2 * curIndex + 1,
+                rightIndex = 2 * curIndex + 2;
             let moveIndex = -1;
-            if (leftChildIndex < this.heap.length
-                && this.heap[leftChildIndex] > this.heap[i]) {
-                moveIndex = leftChildIndex;
+            if (this.heap[leftIndex] < this.heap[curIndex]) {
+                moveIndex = leftIndex;
             }
-            if (rightChildIndex < this.heap.length
-                && this.heap[rightChildIndex] > this.heap[leftChildIndex]) {
-                if (this.heap[rightChildIndex] > this.heap[i]) {
-                    moveIndex = rightChildIndex;
+            if (this.heap[rightIndex] < this.heap[curIndex]) {
+                if (moveIndex !== -1) {
+                    if (this.heap[rightIndex] < this.heap[leftIndex]) {
+                        moveIndex = rightIndex;
+                    }
+                } else {
+                    moveIndex = rightIndex;
                 }
             }
-            if (moveIndex === -1) {
-                break;
-            }
-            const temp = this.heap[moveIndex];
-            this.heap[moveIndex] = this.heap[i];
-            this.heap[i] = temp;
-            i = moveIndex;
+            if (moveIndex === -1) break;
+            const temp = this.heap[curIndex];
+            this.heap[curIndex] = this.heap[moveIndex];
+            this.heap[moveIndex] = temp;
+            curIndex = moveIndex;
         }
-        return top;
-    }
-
-    getSize(): number {
-        return this.heap.length;
-    }
-
-    getTop(): number {
-        return this.heap[0];
+        return max;
     }
 }
 
-class MinHeap {
-    private heap: number[];
+class MaxHeap {
+    heap: number[];
     constructor() {
         this.heap = [];
     }
 
-    heapPush(num: number) {
+    getSize() {
+        return this.heap.length;
+    }
+
+    pushHeap(num: number) {
         this.heap.push(num);
-        let i = this.heap.length - 1;
-        while (i > 0) {
-            const parentIndex = Math.floor((i - 1) / 2);
-            if (this.heap[parentIndex] > this.heap[i]) {
+        let curIndex = this.heap.length - 1;
+        while (curIndex > 0) {
+            const parentIndex = Math.ceil(curIndex / 2) - 1;
+            if (this.heap[parentIndex] < this.heap[curIndex]) {
                 const temp = this.heap[parentIndex];
-                this.heap[parentIndex] = this.heap[i];
-                this.heap[i] = temp;
-                i = parentIndex;
+                this.heap[parentIndex] = this.heap[curIndex];
+                this.heap[curIndex] = temp;
+                curIndex = parentIndex;
             } else {
                 break;
             }
         }
     }
 
-    heapPop(): number {
-        const top = this.heap[0];
-        this.heap[0] = this.heap[this.heap.length - 1];
-        this.heap.pop();
-        let i = 0;
-        while (i < this.heap.length) {
-            const leftChildIndex = (i * 2) + 1;
-            const rightChildIndex = (i * 2) + 2;
+    getMax() {
+        return this.heap[0];
+    }
+
+    popHeap() {
+        const min = this.heap[0];
+        this.heap[0] = this.heap.pop() as number;
+        let curIndex = 0;
+        while (curIndex < this.heap.length) {
+            const leftIndex = 2 * curIndex + 1,
+                rightIndex = 2 * curIndex + 2;
             let moveIndex = -1;
-            if (leftChildIndex < this.heap.length
-                && this.heap[leftChildIndex] < this.heap[i]) {
-                moveIndex = leftChildIndex;
+            if (this.heap[leftIndex] > this.heap[curIndex]) {
+                moveIndex = leftIndex;
             }
-            if (rightChildIndex < this.heap.length
-                && this.heap[rightChildIndex] < this.heap[leftChildIndex]) {
-                if (this.heap[rightChildIndex] < this.heap[i]) {
-                    moveIndex = rightChildIndex;
+            if (this.heap[rightIndex] > this.heap[curIndex]) {
+                if (moveIndex !== -1) {
+                    if (this.heap[rightIndex] > this.heap[leftIndex]) {
+                        moveIndex = rightIndex;
+                    }
+                } else {
+                    moveIndex = rightIndex;
                 }
             }
-            if (moveIndex === -1) {
-                break;
-            }
-            const temp = this.heap[moveIndex];
-            this.heap[moveIndex] = this.heap[i];
-            this.heap[i] = temp;
-            i = moveIndex;
+            if (moveIndex === -1) break;
+            const temp = this.heap[curIndex];
+            this.heap[curIndex] = this.heap[moveIndex];
+            this.heap[moveIndex] = temp;
+            curIndex = moveIndex;
         }
-        return top;
-    }
-
-    getSize(): number {
-        return this.heap.length;
-    }
-
-    getTop(): number {
-        return this.heap[0];
+        return min;
     }
 }
 
 class MedianFinder {
-    smallHeap: MaxHeap; // size n+1
-    largeHeap: MinHeap; // size n
+    minheap: MinHeap;
+    maxheap: MaxHeap;
     constructor() {
-        this.smallHeap = new MaxHeap();
-        this.largeHeap = new MinHeap();
+        this.minheap = new MinHeap();
+        this.maxheap = new MaxHeap();
     }
 
-    addNum(num: number): void { // log(n)
-        if (num < this.smallHeap.getTop()) {
-            this.smallHeap.heapPush(num);
+    addNum(num: number): void {
+        if (
+            this.maxheap.getSize() === 0 ||
+            (this.maxheap.getSize() > 0 && num <= this.maxheap.getMax())
+        ) {
+            this.maxheap.pushHeap(num);
         } else {
-            this.largeHeap.heapPush(num);
+            this.minheap.pushHeap(num);
         }
 
-        if (this.smallHeap.getSize() > this.largeHeap.getSize() + 1) {
-            const smallHeapTop = this.smallHeap.heapPop();
-            this.largeHeap.heapPush(smallHeapTop);
-        } else if (this.smallHeap.getSize() < this.largeHeap.getSize()) {
-            const largeHeapTop = this.largeHeap.heapPop();
-            this.smallHeap.heapPush(largeHeapTop);
+        if (Math.abs(this.minheap.getSize() - this.maxheap.getSize()) > 1) {
+            if (this.minheap.getSize() < this.maxheap.getSize()) {
+                this.minheap.pushHeap(this.maxheap.popHeap());
+            } else {
+                this.maxheap.pushHeap(this.minheap.popHeap());
+            }
         }
     }
 
-    findMedian(): number {  // O(1)
-        let ret = this.smallHeap.getTop();
-        if (this.smallHeap.getSize() === this.largeHeap.getSize()) {
-            ret = (ret + this.largeHeap.getTop()) / 2;
+    findMedian(): number {
+        if (this.minheap.getSize() === this.maxheap.getSize()) {
+            return (this.minheap.getMin() + this.maxheap.getMax()) / 2;
+        } else if (this.maxheap.getSize() > this.minheap.getSize()) {
+            return this.maxheap.getMax();
+        } else {
+            return this.minheap.getMin();
         }
-        return ret;
     }
 }
 
